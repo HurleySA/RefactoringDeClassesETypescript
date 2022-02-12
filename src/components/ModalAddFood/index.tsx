@@ -1,22 +1,36 @@
-import { useRef } from 'react';
 import { FiCheckSquare } from 'react-icons/fi';
 
 import { Form } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
 
-export default function ModalAddFood(props){
-  const formRef = useRef();
+interface food {
+  id: number,
+  available: boolean,
+  image: string,
+  name: string,
+  price: string,
+  description: string,
+}
+
+interface ModalAddProps{
+  isOpen: boolean,
+  setIsOpen: () => void,
+  handleAddFood: (food: food) => Promise<void>
+}
+
+export default function ModalAddFood(props: ModalAddProps){
   const {isOpen, setIsOpen, handleAddFood } = props;
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data:food) => {
     handleAddFood(data);
     setIsOpen();
   }
 
+
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Form ref={formRef} onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <h1>Novo Prato</h1>
         <Input name="image" placeholder="Cole o link aqui" />
 

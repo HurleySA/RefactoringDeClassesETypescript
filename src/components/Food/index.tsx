@@ -4,7 +4,22 @@ import { Container } from './styles';
 import api from '../../services/api';
 import { useState } from 'react';
 
-export default function Food(props){
+interface food {
+  id: number,
+  available: boolean,
+  image: string,
+  name: string,
+  price: string,
+  description: string,
+}
+
+interface FoodProps{
+  food: food,
+  handleDelete: (id: number) => Promise<void>,
+  handleEditFood: (food: food) => void
+}
+
+export default function Food(props:FoodProps){
   const {food, handleDelete ,handleEditFood} = props;
   const { available } = props.food;
 

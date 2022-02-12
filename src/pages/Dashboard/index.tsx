@@ -3,12 +3,22 @@ import Header from "../../components/Header";
 import Food from "../../components/Food";
 import ModalAddFood from "../../components/ModalAddFood";
 import ModalEditFood from "../../components/ModalEditFood";
-import {FoodsContainer} from "./styles.js"
 import api from "../../services/api";
+import { FoodsContainer } from "./styles";
 
-export default function NewDashboard(props){
-    const [foods, setFoods] = useState([]);
-    const [editingFood, setEditingFood] = useState([]);
+interface food {
+  id: number,
+  available: boolean,
+  image: string,
+  name: string,
+  price: string,
+  description: string,
+}
+
+
+export default function NewDashboard(){
+    const [foods, setFoods] = useState<food[]>([]);
+    const [editingFood, setEditingFood] = useState({} as food);
     const [modalOpen, setModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -22,7 +32,7 @@ export default function NewDashboard(props){
 
     }, [])
 
-    const handleAddFood = async (food) => {
+    const handleAddFood = async (food:food) => {
         try {
             const response = await api.post('/foods', {
               ...food,
@@ -36,7 +46,7 @@ export default function NewDashboard(props){
           }
     }
 
-    const handleUpdateFood = async (food) => {
+    const handleUpdateFood = async (food:food) => {
         try {
             
             const foodUpdated = await api.put(
@@ -44,17 +54,17 @@ export default function NewDashboard(props){
               { ...editingFood, ...food },
             );
       
-            const foodsUpdated = foods.map(f =>
+            const foodsUpdated : food[] = foods.map(f =>
               f.id !== foodUpdated.data.id ? f : foodUpdated.data,
             );
 
-            setFoods([foodsUpdated])
+            setFoods(foodsUpdated)
           } catch (err) {
             console.log(err);
           }
     }
 
-    const handleDeleteFood = async (id) => {
+    const handleDeleteFood = async (id:number) => {
         await api.delete(`/foods/${id}`);
 
         const foodsFiltered = foods.filter(food => food.id !== id);
@@ -68,7 +78,7 @@ export default function NewDashboard(props){
     const toggleEditModal = () => {
         setEditModalOpen((editModalOpen) => !editModalOpen)
     }
-    const handleEditFood = (food) => {
+    const handleEditFood = (food:food) => {
         setEditingFood(food);
         setEditModalOpen(true);
     }
